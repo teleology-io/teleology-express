@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`wrapper custom error 1`] = `
+Object {
+  "body": "{\\"name\\":\\"ApiError\\",\\"message\\":\\"Unauthorized\\",\\"code\\":401,\\"description\\":\\"nope\\"}",
+  "headers": Object {
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  },
+  "statusCode": "401",
+}
+`;
+
+exports[`wrapper error defaults 1`] = `
+Object {
+  "body": "{\\"message\\":\\"foo\\"}",
+  "headers": Object {
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  },
+  "statusCode": "500",
+}
+`;
+
+exports[`wrapper normal response if nothing returned 1`] = `
+Object {
+  "body": "{}",
+  "headers": Object {
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  },
+  "statusCode": "200",
+}
+`;
+
+exports[`wrapper success custom headers and body 1`] = `
+Object {
+  "body": "<h1>hello</h1>",
+  "headers": Object {
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "text/html",
+  },
+  "statusCode": "200",
+}
+`;
+
+exports[`wrapper success defaults 1`] = `
+Object {
+  "body": "{\\"foo\\":\\"bar\\"}",
+  "headers": Object {
+    "Access-Control-Allow-Credentials": true,
+    "Access-Control-Allow-Origin": "*",
+    "Content-Type": "application/json",
+  },
+  "statusCode": "200",
+}
+`;
