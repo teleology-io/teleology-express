@@ -1,29 +1,46 @@
 import { wrapper, ApiError } from '../src';
 
-const event = {
-  pathParameters: {
-    slug: 'test',
-  },
-  queryStringParameters: {
-    next: 10,
-  },
+const harness = async (fn) => {
+  const res = {
+    status: jest.fn(),
+    header: jest.fn(),
+    send: jest.fn(),
+    json: jest.fn(),
+  };
+
+  const req = {
+    path: {
+      slug: 'test',
+    },
+    query: {
+      next: 10,
+    },
+  };
+
+  await wrapper(fn)(req, res, jest.fn());
+  return {
+    req, 
+    res,
+  }
 };
 
-describe.only('wrapper', () => {
+describe('wrapper', () => {
   it('success defaults', async () => {
-    const handler = () => ({
+    const handler = async () => ({
       foo: 'bar',
     });
 
-    const result = await wrapper(handler)(event);
-    expect(result).toMatchSnapshot();
+    const { res } = await harness(handler);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.json).toHaveBeenCalledWith({ foo: 'bar' });
   });
 
   it('normal response if nothing returned', async () => {
     const handler = () => undefined;
 
-    const result = await wrapper(handler)(event);
-    expect(result).toMatchSnapshot();
+    const { res } = await harness(handler);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalled();
   });
 
   it('success custom headers and body', async () => {
@@ -34,8 +51,10 @@ describe.only('wrapper', () => {
       body: '<h1>hello</h1>',
     });
 
-    const result = await wrapper(handler)(event);
-    expect(result).toMatchSnapshot();
+    const { res } = await harness(handler);
+    expect(res.status).toHaveBeenCalledWith(200);
+    expect(res.send).toHaveBeenCalledWith('<h1>hello</h1>');
+    expect(res.header).toHaveBeenCalledWith('Content-Type', 'text/html');
   });
 
   it('error defaults', async () => {
@@ -43,8 +62,9 @@ describe.only('wrapper', () => {
       throw new Error('foo');
     };
 
-    const result = await wrapper(handler)(event);
-    expect(result).toMatchSnapshot();
+    const { res } = await harness(handler);
+    expect(res.status).toHaveBeenCalledWith(500);
+    expect(res.json).toHaveBeenCalledWith({});
   });
 
   it('custom error', async () => {
@@ -52,7 +72,12 @@ describe.only('wrapper', () => {
       throw new ApiError('Unauthorized', { code: 401, description: 'nope' });
     };
 
-    const result = await wrapper(handler)(event);
-    expect(result).toMatchSnapshot();
+    const { res } = await harness(handler);
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.json).toHaveBeenCalledWith({
+      description: 'nope',
+      message: 'Unauthorized', 
+      name: 'ApiError',
+    });
   });
 });

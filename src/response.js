@@ -7,7 +7,7 @@ const serializeBody = (e) =>
     return it;
   }, {});
 
-export default (res) => (response) => {
+export default (res) => (response = {}) => {
   if (typeof response === 'string') return res.send(response);
 
   const { body: bd, headers = {}, code = 200, ...rest } = response;
@@ -26,7 +26,7 @@ export default (res) => (response) => {
   }
 
   if (Object.keys(rest).length > 0) {
-    res.json(serializeBody(rest));
+    return res.json(serializeBody(rest));
   }
 
   res.send();

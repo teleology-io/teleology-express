@@ -27,7 +27,7 @@ const extractBody = (body) => {
 };
 
 export default (req) => {
-  const { params, query, body, headers } = req;
+  const { params, query, body, headers = {} } = req;
   const h = Object.keys(headers).reduce((a, key) => {
     a[key.toLowerCase()] = headers[key];
     return a;
