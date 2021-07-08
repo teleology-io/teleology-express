@@ -1,8 +1,8 @@
 import qs from 'querystring';
 
 const extractBody = (body) => {
-  let value = body;
-  
+  const value = body;
+
   try {
     const o = JSON.parse(value);
     if (o && typeof o === 'object') {
@@ -12,15 +12,14 @@ const extractBody = (body) => {
     // do nothing
   }
 
-  try {
-    return { ...qs.parse(value) };
-  } catch (e) {
-    // do nothing
-  }
-
   // Couldn't parse body as object -- return empty for it
   if (typeof body === 'string') {
-    return {};
+    try {
+      return qs.parse(value);
+    } catch (e) {
+      // do nothing
+      return {};
+    }
   }
 
   return body;

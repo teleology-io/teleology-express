@@ -1,6 +1,6 @@
 {
   "name": "@teleology/express",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Common utilities for wrapping express endpoints",
   "main": "lib/index.js",
   "files": [
