@@ -21,6 +21,10 @@ export default (res) => (response = {}) => {
     return res.send(bd);
   }
 
+  if (bd && Array.isArray(bd)) {
+    return res.json(bd);
+  }
+
   if (bd) {
     return res.json(serializeBody(bd));
   }
